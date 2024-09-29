@@ -7,10 +7,11 @@ class CustomButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
 
-  const CustomButton(
-      {super.key,
-      required this.label,
-      required this.onPressed,});
+  const CustomButton({
+    super.key,
+    required this.label,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +23,7 @@ class CustomButton extends StatelessWidget {
           horizontal: 50,
           vertical: 4,
         ),
-        side: BorderSide(
-            color: AppColors.pink,
-            width: 1.5),
+        side: BorderSide(color: AppColors.greyDark, width: 1.5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),

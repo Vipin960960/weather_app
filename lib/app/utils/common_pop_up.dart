@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../app_widgets/app_text_style.dart';
+import '../app_widgets/custom_button.dart';
 import '../app_widgets/custom_text_form_field.dart';
 import '../constants/app_colors.dart';
 
@@ -143,52 +144,66 @@ class CommonPopUp {
                             height: 15,
                           ),
                     Expanded(
-                      child: ListView(
-                        children: [
-                          for (int index = 0;
-                              index < searchedList.length;
-                              index++)
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      child: ((controller.text.isNotEmpty &&
+                                  searchedList.isNotEmpty) ||
+                              (controller.text.isEmpty))
+                          ? ListView(
                               children: [
-                                InkWell(
-                                  onTap: () {
-                                    onTap(searchedList[index]);
-                                    Get.back();
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        25, 8, 25, 15),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          selectedValue == searchedList[index]
-                                              ? Icons.check_circle
-                                              : Icons.circle_outlined,
-                                          size: 25,
-                                          color: selectedValue ==
-                                                  searchedList[index]
-                                              ? AppColors.pink
-                                              : AppColors.blackLight,
+                                for (int index = 0;
+                                    index < searchedList.length;
+                                    index++)
+                                  Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          onTap(searchedList[index]);
+                                          Get.back();
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              25, 8, 25, 15),
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                selectedValue ==
+                                                        searchedList[index]
+                                                    ? Icons.check_circle
+                                                    : Icons.circle_outlined,
+                                                size: 25,
+                                                color: selectedValue ==
+                                                        searchedList[index]
+                                                    ? AppColors.pink
+                                                    : AppColors.blackLight,
+                                              ),
+                                              const SizedBox(
+                                                width: 25,
+                                              ),
+                                              Text(
+                                                searchedList[index],
+                                                style: AppTextStyle.regular(
+                                                    fontSize: 17),
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                        const SizedBox(
-                                          width: 25,
-                                        ),
-                                        Text(
-                                          searchedList[index],
-                                          style: AppTextStyle.regular(
-                                              fontSize: 17),
-                                        )
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                ),
                               ],
+                            )
+                          : Center(
+                              child: CustomButton(
+                                label: 'Proceed with search',
+                                onPressed: () {
+                                  onTap(controller.text);
+                                  Get.back();
+                                },
+                              ),
                             ),
-                        ],
-                      ),
                     ),
                   ],
                 );

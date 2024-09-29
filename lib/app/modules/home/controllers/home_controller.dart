@@ -52,7 +52,9 @@ class HomeController extends GetxController {
 
   @override
   void onReady() {
-    onClickSearchCity("");
+    Future.delayed(Duration(milliseconds: 600)).then((v) {
+      onClickSearchCity("");
+    });
     super.onReady();
   }
 
@@ -78,9 +80,14 @@ class HomeController extends GetxController {
         selectedValue: selectedCountry,
         onTap: (country) async {
           // Selecting State
-          List<String> statesList =
-              AppFormListData.instance.countryMap[country]!.keys.toList();
-          statesList.sort();
+          List<String> statesList;
+          if (AppFormListData.instance.countryMap[country] != null) {
+            statesList =
+                AppFormListData.instance.countryMap[country]!.keys.toList();
+            statesList.sort();
+          } else {
+            statesList = [];
+          }
           await CommonMethods.timerForNextList();
           CommonPopUp.showBottomSheetList(
             context: Get.context,
@@ -90,9 +97,6 @@ class HomeController extends GetxController {
             selectedValue: selectedState,
             onTap: (state) async {
               // Selecting city
-              List<String> citiesList =
-                  AppFormListData.instance.countryMap[country]![state]!;
-              citiesList.sort();
               await CommonMethods.timerForNextList();
               getCityList(country, state);
             },
@@ -103,10 +107,18 @@ class HomeController extends GetxController {
   }
 
   void getCityList(String country, String state) {
+    List<String> citiesList;
+    if (AppFormListData.instance.countryMap[country] != null &&
+        AppFormListData.instance.countryMap[country]![state] != null) {
+      citiesList = AppFormListData.instance.countryMap[country]![state]!;
+      citiesList.sort();
+    } else {
+      citiesList = [];
+    }
     CommonPopUp.showBottomSheetList(
       context: Get.context,
       height: Get.height * 0.7,
-      list: AppFormListData.instance.countryMap[country]![state]!,
+      list: citiesList,
       title: 'City in $state',
       selectedValue: selectedCity,
       onTap: (city) {
@@ -164,7 +176,7 @@ class HomeController extends GetxController {
     searchController.clear();
     hideCloseButton.value = true;
     weatherApiModel.value = WeatherApiModel();
-    // FocusScope.of(Get.context!).unfocus();
+    FocusScope.of(Get.context!).unfocus();
     onClickSearchCity("");
   }
 }
